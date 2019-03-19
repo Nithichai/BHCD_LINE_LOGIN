@@ -42,7 +42,7 @@ app.get('/login/line/return',
   passport.authenticate('line', {failureRedirect: '/login/line'}),
   function(req, res) {
     res.status(200)
-    res.json(user)
+    res.json(req.user)
 });
 
 app.get('/logout', function(req, res){
