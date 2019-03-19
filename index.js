@@ -8,7 +8,7 @@ const app = express();
 passport.use(new LineStrategy({
   channelID: process.env.CHANNEL_ID,
   channelSecret: process.env.CHANNEL_SECRET,
-  callbackURL: 'https://bhcd-line-login/login/line/return',
+  callbackURL: 'https://bhcd-line-login.herokuapp.com/login/line/return',
   scope: ['profile', 'openid', 'email'],
   botPrompt: 'normal'
 },
