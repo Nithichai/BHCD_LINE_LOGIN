@@ -40,9 +40,10 @@ app.get('/', (req, res) => {
 app.get('/login/line', passport.authenticate('line'));
 
 app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/login/line'}), function(req, res) {
+  console.log(req.user)
   request({
-    method: "post",
-    url: 'https://bhcd-api.herokuapp.com/login/new',
+    method: 'post',
+    url: 'http://bhcd-api.herokuapp.com/login/new',
     headers: {
       'Content-Type' : 'application/json'
     },
@@ -61,6 +62,7 @@ app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/
 });
 
 app.get('/logout', function(req, res){
+  console.log(req.user)
   request({
     method: "post",
     url: 'https://bhcd-api.herokuapp.com/delete/line-id',
