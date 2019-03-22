@@ -40,7 +40,7 @@ app.get('/', (req, res) => {
 app.get('/login/line', passport.authenticate('line'));
 
 app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/login/line'}), function(req, res) {
-  this.request({
+  request({
     method: "post",
     url: 'https://bhcd-api.herokuapp.com/login/new',
     headers: {
@@ -61,38 +61,17 @@ app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/
 });
 
 app.get('/logout', function(req, res){
-  console.log(req.user)
-  // this.request({
-  //   method: "post",
-  //   url: 'https://bhcd-api.herokuapp.com/delete/line-id',
-  //   json: {
-  //     "data" : {
-  //       "line_id" : req.user.id,
-  //       "bot_id"  : req.user.id,
-  //       "name" : req.user.displayName,
-  //       "email" : req.user.email,
-  //       "pic_url" : req.user.pic_url
-  //     }
-  //   }
-  // }, (err, response, body) => {
-  //   res.status(response.status)
-  // })
-  // axios({
-  //   method: 'post',
-  //   url: 'https://bhcd-api.herokuapp.com/delete/line-id',
-  //   headers: {
-  //     'Content-Type' : 'application/json'
-  //   },
-  //   data: {
-  //       "data" : {
-  //         "line_id" : req.user.id
-  //       }
-  //     }
-  // }).then((response) => {
-  //   req.logout()
-  //   res.status(response.status)
-  //   // res.redirect('/login/line')
-  // })
+  request({
+    method: "post",
+    url: 'https://bhcd-api.herokuapp.com/delete/line-id',
+    json: {
+      "data" : {
+        "line_id" : req.user.id
+      }
+    }
+  }, (err, response, body) => {
+    res.status(response.status)
+  })
 });
 
 const port = process.env.PORT || 3000;
