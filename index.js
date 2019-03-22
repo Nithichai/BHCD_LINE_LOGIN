@@ -34,7 +34,6 @@ app.use(passport.session());
 
 // Define routes.
 app.get('/', (req, res) => {
-  console.log(req.user)
   res.sendStatus(200)
 })
 
@@ -57,7 +56,8 @@ app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/
         }
       }
   }).then((response) => {
-    res.status(response.status)
+    // res.status(response.status)
+    console.log(response.status)
   })
 });
 
@@ -76,7 +76,8 @@ app.get('/logout', function(req, res){
       }
   }).then((response) => {
     req.logout()
-    res.redirect('/login/line')
+    res.status(response.status)
+    // res.redirect('/login/line')
   })
 });
 
