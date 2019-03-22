@@ -2,7 +2,7 @@ const express = require('express');
 const passport = require('passport');
 const LineStrategy = require('passport-line-auth').Strategy;
 const jwt = require('jsonwebtoken');
-const axois = require('axios')
+const axios = require('axios')
 
 const app = express();
 
@@ -34,6 +34,7 @@ app.use(passport.session());
 
 // Define routes.
 app.get('/', (req, res) => {
+  console.log(req.user)
   res.sendStatus(200)
 })
 
@@ -61,8 +62,22 @@ app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/
 });
 
 app.get('/logout', function(req, res){
-  req.logout()
-  res.redirect('/login/line')
+  console.log(req.user)
+  axios({
+    method: 'post',
+    url: 'https://bhcd-api.herokuapp.com/delete/line-id',
+    headers: {
+      'Content-Type' : 'application/json'
+    },
+    data: {
+        "data" : {
+          "line_id" : req.user.id
+        }
+      }
+  }).then((response) => {
+    req.logout()
+    res.redirect('/login/line')
+  })
 });
 
 const port = process.env.PORT || 3000;
