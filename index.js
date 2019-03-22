@@ -53,7 +53,7 @@ app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/
         "bot_id"  : req.user.id,
         "name" : req.user.displayName,
         "email" : req.user.email,
-        "pic_url" : req.user.pic_url
+        "pic_url" : req.user.pictureUrl
       }
     }
   }, (err, response, body) => {
