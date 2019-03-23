@@ -9,12 +9,9 @@ const axios = require('axios');
 const app = express();
 
 passport.use(new LineStrategy({
-  // channelID: process.env.CHANNEL_ID,
-  channelID: "1556734128",
-  // channelSecret: process.env.CHANNEL_SECRET,
-  channelSecret: "50d285edc9f1385bef799d2f04879c35",
-  // callbackURL: 'https://bhcd-line-login.herokuapp.com/login/line/return',
-  callbackURL: 'http://127.0.0.1:3000/login/line/return',
+  channelID: process.env.CHANNEL_ID,
+  channelSecret: process.env.CHANNEL_SECRET,
+  callbackURL: 'https://bhcd-line-login.herokuapp.com/login/line/return',
   scope: ['profile', 'openid', 'email'],
   botPrompt: 'normal'
 },
