@@ -5,6 +5,7 @@ const passport = require('passport');
 const LineStrategy = require('passport-line-auth').Strategy;
 const jwt = require('jsonwebtoken');
 const axios = require('axios');
+const cors = require('cors')
 
 const app = express();
 
@@ -33,9 +34,10 @@ app.use(require('express-session')({secret: 'keyboard dog', resave: true, saveUn
 // Initialize Passport and restore authentication state, if any, from the session.
 app.use(passport.initialize());
 app.use(passport.session());
+app.user(cors());
 
 // Define routes.
-app.get('/', (req, res) => {
+app.get('/', (req, res, next) => {
   if (req.user == undefined) {
     res.sendStatus(404)
   } else {
