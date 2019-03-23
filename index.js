@@ -36,7 +36,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Define routes.
-app.get('/', (req, res, next) => {
+app.get('/', (req, res) => {
   if (req.user == undefined) {
     res.sendStatus(404)
   } else {
