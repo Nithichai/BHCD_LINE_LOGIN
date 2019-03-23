@@ -38,9 +38,10 @@ app.use(passport.session());
 // Define routes.
 app.get('/', cors(),  (req, res, next) => {
   if (req.user == undefined) {
-    res.sendStatus(404)
+    res.redirect('/login/line')
   } else {
-    res.sendStatus(200)
+    res.status(200)
+    next()
   }
 })
 
@@ -63,10 +64,10 @@ app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/
     }
   }).then((response) => {
     console.log(response.data.data)
-    res.sendStatus(200)
+    res.status(200)
   }).catch((error) => {
     console.log(error.message)
-    res.sendStatus(404)
+    res.status(404)
   })
 });
 
