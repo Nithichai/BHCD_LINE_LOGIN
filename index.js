@@ -1,15 +1,20 @@
+'use strict';
+
 const express = require('express');
 const passport = require('passport');
 const LineStrategy = require('passport-line-auth').Strategy;
 const jwt = require('jsonwebtoken');
-const request = require('request');
+const axios = require('axios');
 
 const app = express();
 
 passport.use(new LineStrategy({
-  channelID: process.env.CHANNEL_ID,
-  channelSecret: process.env.CHANNEL_SECRET,
-  callbackURL: 'https://bhcd-line-login.herokuapp.com/login/line/return',
+  // channelID: process.env.CHANNEL_ID,
+  channelID: "1556734128",
+  // channelSecret: process.env.CHANNEL_SECRET,
+  channelSecret: "50d285edc9f1385bef799d2f04879c35",
+  // callbackURL: 'https://bhcd-line-login.herokuapp.com/login/line/return',
+  callbackURL: 'http://127.0.0.1:3000/login/line/return',
   scope: ['profile', 'openid', 'email'],
   botPrompt: 'normal'
 },
@@ -34,45 +39,60 @@ app.use(passport.session());
 
 // Define routes.
 app.get('/', (req, res) => {
-  res.sendStatus(200)
+  if (req.user == undefined) {
+    res.sendStatus(404)
+  } else {
+    res.sendStatus(200)
+  }
 })
 
 app.get('/login/line', passport.authenticate('line'));
 
-app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/login/line'}), function(req, res) {
-  console.log(req.user)
-  request({
+app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/'}), function(req, res) {
+  axios({
     method: 'post',
-    url: 'http://bhcd-api.herokuapp.com/login/new',
+    url: 'https://bhcd-api.herokuapp.com/login/new',
     headers: {
       'Content-Type' : 'application/json'
     },
-    json: {
-      "data" : {
-        "line_id" : req.user.id,
-        "bot_id"  : req.user.id,
-        "name" : req.user.displayName,
-        "email" : req.user.email,
-        "pic_url" : req.user.pictureUrl
-      }
+    data: {
+        "data" : {
+          "line_id" : req.user.id,
+          "bot_id"  : req.user.id,
+          "name" : req.user.displayName,
+          "email" : req.user.email,
+          "pic_url" : req.user.pictureUrl
+        }
     }
-  }, (err, response, body) => {
-    res.status(response.status)
+  }).then((response) => {
+    console.log(response.data.data)
+    res.status(200)
+    res.send('Login complete')
+  }).catch((error) => {
+    console.log(error.message)
+    res.status(400)
   })
 });
 
 app.get('/logout', function(req, res){
-  console.log(req.user)
-  request({
-    method: "post",
-    url: 'https://bhcd-api.herokuapp.com/delete/line-id',
-    json: {
-      "data" : {
-        "line_id" : req.user.id
-      }
+  axios({
+    method: 'post',
+    url: 'https://bhcd-api.herokuapp.com/login/delete/line-id',
+    headers: {
+      'Content-Type' : 'application/json'
+    },
+    data: {
+        "data" : {
+          "line_id" : req.user.id
+        }
     }
-  }, (err, response, body) => {
-    res.status(response.status)
+  }).then((response) => {
+    console.log(response.data.data)
+    res.status(200)
+    res.send('Logout complete')
+  }).catch((error) => {
+    console.log(error.message)
+    res.status(400)
   })
 });
 
