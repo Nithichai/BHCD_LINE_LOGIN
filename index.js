@@ -48,48 +48,45 @@ app.get('/login/line', passport.authenticate('line'));
 app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/'}), function(req, res) {
   axios({
     method: 'post',
-    url: 'https://bhcd-api.herokuapp.com/login/new',
+    url: 'https://bhcd-api.herokuapp.com/user-info/new',
     headers: {
       'Content-Type' : 'application/json'
     },
     data: {
         "data" : {
-          "line_id" : req.user.id,
-          "bot_id"  : req.user.id,
-          "name" : req.user.displayName,
+          "id" : req.user.id,
+          "displayName" : req.user.displayName,
           "email" : req.user.email,
-          "pic_url" : req.user.pictureUrl
+          "pic" : req.user.pictureUrl
         }
     }
   }).then((response) => {
     console.log(response.data.data)
-    res.status(200)
-    res.send('Login complete')
+    res.sendStatus(200)
   }).catch((error) => {
     console.log(error.message)
-    res.status(400)
+    res.sendStatus(404)
   })
 });
 
 app.get('/logout', function(req, res){
   axios({
     method: 'post',
-    url: 'https://bhcd-api.herokuapp.com/login/delete/line-id',
+    url: 'https://bhcd-api.herokuapp.com/user-info/delete/id',
     headers: {
       'Content-Type' : 'application/json'
     },
     data: {
         "data" : {
-          "line_id" : req.user.id
+          "id" : req.user.id
         }
     }
   }).then((response) => {
     console.log(response.data.data)
-    res.status(200)
-    res.send('Logout complete')
+    res.sendStatus(200)
   }).catch((error) => {
     console.log(error.message)
-    res.status(400)
+    res.sendStatus(400)
   })
 });
 
