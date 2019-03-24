@@ -40,14 +40,13 @@ app.get('/', cors(),  (req, res, next) => {
   if (req.user == undefined) {
     res.redirect('/login/line')
   } else {
-    res.status(200)
-    next()
+    res.sendStatus(200)
   }
 })
 
 app.get('/login/line', passport.authenticate('line'));
 
-app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/'}), function(req, res) {
+app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/'}), function(req, res, next) {
   axios({
     method: 'post',
     url: 'https://bhcd-api.herokuapp.com/user-info/new',
@@ -64,10 +63,11 @@ app.get('/login/line/return', passport.authenticate('line', {failureRedirect: '/
     }
   }).then((response) => {
     console.log(response.data.data)
-    res.status(200)
+    // res.status(200)
+    next()
   }).catch((error) => {
     console.log(error.message)
-    res.status(404)
+    res.redirect('/login/line')
   })
 });
 
