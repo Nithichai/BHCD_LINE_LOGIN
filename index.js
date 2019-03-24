@@ -69,9 +69,8 @@ app.get('/login/line/return', cors(), passport.authenticate('line', {failureRedi
         }
     }
   }).then((response) => {
-    console.log(req.user)
-    console.log(response.data)
-    res.redirect("https://basic-health-care-device.herokuapp.com/#")
+    // res.redirect("https://basic-health-care-device.herokuapp.com/#")
+    res.redirect("http://127.0.0.1:8080/#")
   }).catch((error) => {
     res.redirect("/login/line")
   })
