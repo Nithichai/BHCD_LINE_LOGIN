@@ -71,15 +71,7 @@ app.get('/login/line/return', cors(), passport.authenticate('line', {failureRedi
     }
   }).then((response) => {
     // res.redirect("https://basic-health-care-device.herokuapp.com/#")
-    // res.redirect("http://127.0.0.1:8080/#")
-    axios({
-      method: 'get',
-      url: 'https://bhcd-line-login.herokuapp.com',
-    }).then((response2) => {
-      res.send(response2)
-    }).catch((error) => {
-      console.log(error)
-    })
+    res.redirect("http://127.0.0.1:8080/#")
   }).catch((error) => {
     res.redirect("/login/line")
   })
