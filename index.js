@@ -48,7 +48,7 @@ app.get('/', (req, res) => {
   if (req.user == undefined) {
     res.sendStatus(404)
   } else {
-    res.sendStatus(200)
+    res.status(200).send(req.user)
   }
 })
 
