@@ -45,7 +45,7 @@ app.use(passport.session());
 // Define routes.
 app.get('/', (req, res) => {
   if (req.user == undefined) {
-    res.redirect('/login/line')
+    res.sendStatus(404)
   } else {
     res.sendStatus(200)
   }
@@ -70,11 +70,9 @@ app.get('/login/line/return', cors(), passport.authenticate('line', {failureRedi
     }
   }).then((response) => {
     console.log(response.data.data)
-    res.status(200)
-    res.end()
+    next()
   }).catch((error) => {
-    res.status(404)
-    res.end()
+    res.redirect("/login/line")
   })
 });
 
