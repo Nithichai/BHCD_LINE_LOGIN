@@ -26,6 +26,13 @@ function(accessToken, refreshToken, params, profile, cb) {
 passport.serializeUser(function(user, cb) {cb(null, user);});
 passport.deserializeUser(function(obj, cb) {cb(null, obj);});
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 // Use application-level middleware for common functionality, including
 // parsing, and session handling.
 app.use(require('body-parser').urlencoded({extended: true}));
@@ -34,19 +41,13 @@ app.use(require('express-session')({secret: 'keyboard dog', resave: true, saveUn
 // Initialize Passport and restore authentication state, if any, from the session.
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
-});
 
 // Define routes.
 app.get('/', (req, res) => {
   if (req.user == undefined) {
     res.redirect('/login/line')
   } else {
-    res.status(200)
-    res.end()
+    res.sendStatus(200)
   }
 })
 
